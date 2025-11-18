@@ -3,6 +3,10 @@ import { blogConnector } from './blogs';
 import { TwitterConnector } from './twitter';
 import { InstagramConnector } from './instagram';
 import { RedditConnector } from './reddit';
+import { TikTokConnector } from './tiktok';
+import { YouTubeConnector } from './youtube';
+import { LinkedInConnector } from './linkedin';
+import { FacebookConnector } from './facebook';
 
 export interface ConnectorRegistry {
   [key: string]: BaseConnector;
@@ -12,16 +16,20 @@ export interface ConnectorRegistry {
 const twitterConnector = new TwitterConnector();
 const instagramConnector = new InstagramConnector();
 const redditConnector = new RedditConnector();
+const tiktokConnector = new TikTokConnector();
+const youtubeConnector = new YouTubeConnector();
+const linkedinConnector = new LinkedInConnector();
+const facebookConnector = new FacebookConnector();
 
 export const connectors: ConnectorRegistry = {
   blog: blogConnector,
   twitter: twitterConnector,
   instagram: instagramConnector,
   reddit: redditConnector,
-  // Add more connectors here:
-  // youtube: youtubeConnector,
-  // tiktok: tiktokConnector,
-  // linkedin: linkedinConnector,
+  tiktok: tiktokConnector,
+  youtube: youtubeConnector,
+  linkedin: linkedinConnector,
+  facebook: facebookConnector,
 };
 
 export function getConnector(name: string): BaseConnector | null {
@@ -38,4 +46,8 @@ export {
   twitterConnector,
   instagramConnector,
   redditConnector,
+  tiktokConnector,
+  youtubeConnector,
+  linkedinConnector,
+  facebookConnector,
 };

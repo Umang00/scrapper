@@ -140,7 +140,7 @@ export class StorageAdapter {
     });
   }
 
-  async uploadHAR(crawlId: string, harData: any, itemId?: string): Promise<StorageReference> {
+  async uploadHAR(crawlId: string, harData: unknown, itemId?: string): Promise<StorageReference> {
     const harBuffer = Buffer.from(JSON.stringify(harData, null, 2));
     return this.upload({
       crawlId,
@@ -162,7 +162,7 @@ export class StorageAdapter {
     });
   }
 
-  async saveItem(itemData: any): Promise<string> {
+  async saveItem(itemData: Record<string, unknown>): Promise<string> {
     try {
       const itemId = uuidv4();
 

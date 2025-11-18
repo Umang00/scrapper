@@ -5,8 +5,8 @@ import { config } from '../config';
 export interface SessionData {
   platform: string;
   accountIdentifier: string;
-  cookies?: any[];
-  tokens?: Record<string, any>;
+  cookies?: Array<Record<string, unknown>>;
+  tokens?: Record<string, unknown>;
   expiresAt?: Date;
 }
 
@@ -40,7 +40,7 @@ export class AuthManager {
     // Fetch from database
     try {
       let query = 'SELECT * FROM auth_credentials WHERE platform = $1 AND is_valid = true';
-      const params: any[] = [platform];
+      const params: (string | boolean)[] = [platform];
 
       if (accountIdentifier) {
         query += ' AND account_identifier = $2';

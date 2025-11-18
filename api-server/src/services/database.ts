@@ -22,7 +22,7 @@ class Database {
     });
   }
 
-  async query<T = any>(text: string, params?: any[]): Promise<T[]> {
+  async query<T = unknown>(text: string, params?: unknown[]): Promise<T[]> {
     const start = Date.now();
     try {
       const result = await this.pool.query(text, params);

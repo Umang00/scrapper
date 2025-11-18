@@ -35,7 +35,7 @@ export class AuthController {
 
       const credentialId = uuidv4();
 
-      const [credential] = await db.query(
+      const credentials = await db.query<{ id: string; platform: string; account_identifier: string }>(
         `INSERT INTO auth_credentials (
           id, platform, account_identifier, credential_type, encrypted_data,
           cookie_bundle, oauth_tokens, notes
@@ -58,6 +58,7 @@ export class AuthController {
           notes,
         ]
       );
+      const credential = credentials[0];
 
       logger.info('Auth credential created', { platform, account_identifier });
 
@@ -82,9 +83,9 @@ export class AuthController {
       const { platform } = req.query;
 
       let query = 'SELECT id, platform, account_identifier, credential_type, is_valid, last_validated_at, created_at FROM auth_credentials WHERE 1=1';
-      const params: any[] = [];
+      const params: (string | boolean)[] = [];
 
-      if (platform) {
+      if (platform && typeof platform === 'string') {
         params.push(platform);
         query += ` AND platform = $${params.length}`;
       }

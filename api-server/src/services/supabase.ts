@@ -32,7 +32,7 @@ class SupabaseService {
   /**
    * Broadcast event to a channel
    */
-  async broadcast<T = any>(
+  async broadcast<T = unknown>(
     channel: string,
     event: string,
     payload: T

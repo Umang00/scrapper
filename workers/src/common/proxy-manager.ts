@@ -98,8 +98,8 @@ export class ProxyManager {
     }
   }
 
-  getStats(): Record<string, any> {
-    const stats: Record<string, any> = {};
+  getStats(): Record<string, { type: string; isActive: boolean; successCount: number; failureCount: number; totalRequests: number; lastUsed: Date | undefined }> {
+    const stats: Record<string, { type: string; isActive: boolean; successCount: number; failureCount: number; totalRequests: number; lastUsed: Date | undefined }> = {};
 
     for (const [id, proxy] of this.proxies) {
       stats[id] = {

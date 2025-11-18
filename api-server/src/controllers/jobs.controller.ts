@@ -105,21 +105,24 @@ export class JobsController {
       } = req.query;
 
       let query = 'SELECT * FROM crawl_jobs WHERE 1=1';
-      const params: any[] = [];
+      const params: (string | number)[] = [];
 
-      if (status) {
+      if (status && typeof status === 'string') {
         params.push(status);
         query += ` AND status = $${params.length}`;
       }
 
-      if (connector) {
+      if (connector && typeof connector === 'string') {
         params.push(connector);
         query += ` AND connector = $${params.length}`;
       }
 
       query += ' ORDER BY created_at DESC';
 
-      params.push(limit, offset);
+      const limitNum = limit ? Number(limit) : 50;
+      const offsetNum = offset ? Number(offset) : 0;
+
+      params.push(limitNum, offsetNum);
       query += ` LIMIT $${params.length - 1} OFFSET $${params.length}`;
 
       const jobs = await db.query(query, params);

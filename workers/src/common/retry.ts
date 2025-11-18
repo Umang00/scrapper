@@ -89,7 +89,8 @@ export async function retryWithBackoff<T>(
  * Check if error is retryable based on error message or code
  */
 function isErrorRetryable(error: Error, retryableErrors: string[]): boolean {
-  const errorString = error.message + ' ' + (error as any).code;
+  const errorCode = error && typeof error === 'object' && 'code' in error ? (error as { code: string }).code : '';
+  const errorString = error.message + ' ' + errorCode;
 
   return retryableErrors.some((retryable) =>
     errorString.toLowerCase().includes(retryable.toLowerCase())
@@ -108,13 +109,13 @@ function sleep(ms: number): Promise<void> {
  */
 export function Retry(options: RetryOptions = {}) {
   return function (
-    _target: any,
+    _target: object,
     _propertyKey: string,
     descriptor: PropertyDescriptor
   ) {
     const originalMethod = descriptor.value;
 
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (...args: unknown[]) {
       return retryWithBackoff(
         () => originalMethod.apply(this, args),
         options
