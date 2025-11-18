@@ -1,6 +1,7 @@
 {
   "name": "@universal-crawler/frontend",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "description": "Operator console for Universal Crawler",
   "scripts": {
