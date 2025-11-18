@@ -78,7 +78,7 @@ describe('retryWithBackoff', () => {
       .mockResolvedValueOnce('success');
 
     const delays: number[] = [];
-    const onRetry = vi.fn((attempt) => {
+    const onRetry = vi.fn(() => {
       delays.push(Date.now());
     });
 
