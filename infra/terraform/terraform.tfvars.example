@@ -1,0 +1,33 @@
+# Copy this file to terraform.tfvars and fill in your values
+
+# AWS Configuration
+aws_region  = "us-east-1"
+environment = "dev"
+
+# Database Configuration
+db_name     = "universal_crawler"
+db_username = "crawler_admin"
+db_password = "CHANGEME_secure_password"
+
+# Supabase Configuration
+supabase_url              = "https://your-project.supabase.co"
+supabase_anon_key         = "your-anon-key"
+supabase_service_role_key = "your-service-role-key"
+
+# S3 Storage
+s3_bucket_name = "universal-crawler-artifacts-dev"
+
+# Encryption
+encryption_key = "CHANGEME_32_character_key_here"
+
+# Container Images (update after building and pushing)
+api_image      = "ghcr.io/your-org/universal-crawler/api-server:latest"
+worker_image   = "ghcr.io/your-org/universal-crawler/workers:latest"
+frontend_image = "ghcr.io/your-org/universal-crawler/frontend:latest"
+
+# ECS Scaling (adjust based on workload)
+worker_count = 2
+api_cpu      = 512
+api_memory   = 1024
+worker_cpu   = 2048
+worker_memory = 4096
