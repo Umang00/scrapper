@@ -202,19 +202,65 @@ npm run test
 
 ## Deployment
 
-### Docker
+### Option 1: Docker Compose (Local/Development)
+
+```bash
+# Create .env file with required variables
+cp .env.example .env
+# Edit .env with your credentials
+
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Scale workers
+docker-compose up -d --scale worker=3
+
+# Stop all services
+docker-compose down
+```
+
+### Option 2: Docker Build (Production)
 
 ```bash
 # Build images
-docker build -t universal-crawler-api ./api-server
-docker build -t universal-crawler-worker ./workers
-docker build -t universal-crawler-ui ./frontend
+docker build -f api-server/Dockerfile -t universal-crawler-api .
+docker build -f workers/Dockerfile -t universal-crawler-worker .
+docker build -f frontend/Dockerfile -t universal-crawler-ui .
 
-# Run with docker-compose
-docker-compose up -d
+# Push to registry
+docker tag universal-crawler-api ghcr.io/your-org/api-server:latest
+docker push ghcr.io/your-org/api-server:latest
 ```
 
-### Manual
+### Option 3: AWS Deployment with Terraform
+
+```bash
+# Navigate to terraform directory
+cd infra/terraform
+
+# Initialize Terraform
+terraform init
+
+# Configure variables
+cp terraform.tfvars.example terraform.tfvars
+# Edit terraform.tfvars with your AWS credentials
+
+# Review infrastructure plan
+terraform plan
+
+# Deploy infrastructure
+terraform apply
+
+# Get service URLs
+terraform output
+```
+
+See [Terraform README](infra/terraform/README.md) for detailed deployment guide.
+
+### Option 4: Manual Deployment
 
 ```bash
 # Build production bundles
@@ -225,6 +271,16 @@ NODE_ENV=production npm run start --workspace=api-server
 NODE_ENV=production npm run start --workspace=workers
 NODE_ENV=production npm run start --workspace=frontend
 ```
+
+### CI/CD
+
+GitHub Actions pipeline automatically:
+- Runs lint and type-check on all PRs
+- Builds and tests all workspaces
+- Builds Docker images on main branch
+- Runs security scans (npm audit, Snyk)
+
+See [.github/workflows/ci.yml](.github/workflows/ci.yml) for pipeline configuration.
 
 ## Security
 
