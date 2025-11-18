@@ -5,6 +5,7 @@ import { config } from './config';
 import { logger } from './services/logger';
 import { requestLogger } from './middleware/requestLogger';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
+import { apiLimiter } from './middleware/rateLimiter';
 import routes from './routes';
 
 const app = express();
@@ -24,6 +25,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Request logging
 app.use(requestLogger);
+
+// Rate limiting (apply to all API routes)
+app.use('/api', apiLimiter);
 
 // API routes
 app.use('/api', routes);

@@ -6,6 +6,7 @@ import { AuthController } from '../controllers/auth.controller';
 import { db } from '../services/database';
 import { supabase } from '../services/supabase';
 import { storage } from '../services/storage';
+import { jobCreationLimiter, authLimiter, captchaLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
 
@@ -29,7 +30,7 @@ router.get('/health', async (_req, res) => {
 });
 
 // Jobs routes
-router.post('/jobs', JobsController.createJob);
+router.post('/jobs', jobCreationLimiter, JobsController.createJob); // Rate limited: 10 jobs/hour
 router.get('/jobs', JobsController.listJobs);
 router.get('/jobs/:id', JobsController.getJob);
 router.post('/jobs/:id/stop', JobsController.stopJob);
@@ -41,10 +42,10 @@ router.get('/items/:id', ItemsController.getItem);
 // Captcha routes
 router.get('/captcha/queue', CaptchaController.getQueue);
 router.get('/captcha/:id', CaptchaController.getCaptcha);
-router.post('/captcha/:id/solve', CaptchaController.solveCaptcha);
+router.post('/captcha/:id/solve', captchaLimiter, CaptchaController.solveCaptcha); // Rate limited: 20/min
 
 // Auth/Session routes
-router.post('/auth/sessions', AuthController.createSession);
+router.post('/auth/sessions', authLimiter, AuthController.createSession); // Rate limited: 5/15min
 router.get('/auth/sessions', AuthController.listSessions);
 
 export default router;
