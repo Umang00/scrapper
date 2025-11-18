@@ -6,6 +6,7 @@ import {
   NormalizedItem,
 } from '../base-connector';
 import { logger } from '../../services/logger';
+import { videoTranscriber } from '../../services/video-transcriber';
 
 /**
  * YouTube Connector
@@ -109,6 +110,29 @@ export class YouTubeConnector extends BaseConnector {
     }
     if (image) {
       item.mediaRefs?.push({ type: 'image', url: image });
+    }
+
+    // Add video transcription if enabled
+    if (videoTranscriber.isEnabled()) {
+      logger.info('[YouTube] Attempting to transcribe video', { url: rawData.url });
+      const transcriptResult = await videoTranscriber.transcribe(rawData.url);
+
+      if (transcriptResult) {
+        item.transcript = {
+          fullText: transcriptResult.fullText,
+          language: transcriptResult.language,
+          method: transcriptResult.method,
+        };
+
+        // Enhance textContent with transcript for better searchability
+        item.textContent = `${description}\n\nTranscript:\n${transcriptResult.fullText}`;
+
+        logger.info('[YouTube] Video transcribed successfully', {
+          url: rawData.url,
+          method: transcriptResult.method,
+          textLength: transcriptResult.fullText.length,
+        });
+      }
     }
 
     return [item];

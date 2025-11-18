@@ -6,6 +6,7 @@ import {
   NormalizedItem,
 } from '../base-connector';
 import { logger } from '../../services/logger';
+import { videoTranscriber } from '../../services/video-transcriber';
 
 /**
  * Instagram Connector
@@ -96,6 +97,22 @@ export class InstagramConnector extends BaseConnector {
         html: rawData.url,
       },
     };
+
+    // Add video transcription for Reels
+    if (video && videoTranscriber.isEnabled()) {
+      logger.info('[Instagram] Attempting to transcribe video', { url: rawData.url });
+      const transcriptResult = await videoTranscriber.transcribe(rawData.url);
+
+      if (transcriptResult) {
+        item.transcript = {
+          fullText: transcriptResult.fullText,
+          language: transcriptResult.language,
+          method: transcriptResult.method,
+        };
+        item.textContent = `${description}\n\nTranscript:\n${transcriptResult.fullText}`;
+        logger.info('[Instagram] Video transcribed', { url: rawData.url, method: transcriptResult.method });
+      }
+    }
 
     return [item];
   }

@@ -51,6 +51,11 @@ export interface NormalizedItem {
     html?: string;
     [key: string]: string | undefined;
   };
+  transcript?: {
+    fullText: string;
+    language?: string;
+    method: 'youtube-captions' | 'vosk-stt';
+  };
 }
 
 export abstract class BaseConnector {

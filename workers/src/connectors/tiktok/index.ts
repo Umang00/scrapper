@@ -6,6 +6,7 @@ import {
   NormalizedItem,
 } from '../base-connector';
 import { logger } from '../../services/logger';
+import { videoTranscriber } from '../../services/video-transcriber';
 
 /**
  * TikTok Connector
@@ -96,6 +97,22 @@ export class TikTokConnector extends BaseConnector {
     }
     if (image) {
       item.mediaRefs?.push({ type: 'image', url: image });
+    }
+
+    // Add video transcription if enabled (uses Vosk for TikTok)
+    if (videoTranscriber.isEnabled()) {
+      logger.info('[TikTok] Attempting to transcribe video', { url: rawData.url });
+      const transcriptResult = await videoTranscriber.transcribe(rawData.url);
+
+      if (transcriptResult) {
+        item.transcript = {
+          fullText: transcriptResult.fullText,
+          language: transcriptResult.language,
+          method: transcriptResult.method,
+        };
+        item.textContent = `${description}\n\nTranscript:\n${transcriptResult.fullText}`;
+        logger.info('[TikTok] Video transcribed', { url: rawData.url, method: transcriptResult.method });
+      }
     }
 
     return [item];
