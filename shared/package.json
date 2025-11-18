@@ -6,8 +6,10 @@
   "main": "types/index.ts",
   "types": "types/index.ts",
   "scripts": {
+    "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
-    "test": "echo \"No tests in shared workspace\" && exit 0"
+    "test": "echo \"No tests in shared workspace\" && exit 0",
+    "lint": "echo \"No linting in shared workspace\" && exit 0"
   },
   "devDependencies": {
     "typescript": "^5.7.2"
