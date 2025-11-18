@@ -202,7 +202,34 @@ npm run test
 
 ## Deployment
 
-### Option 1: Docker Compose (Local/Development)
+### Option 1: Render.com (Recommended - FREE Tier!) ⭐
+
+Deploy to [Render](https://render.com) with **$0/month** free tier for testing!
+
+```bash
+# 1. Sign up at render.com
+# 2. Create PostgreSQL database (Free tier)
+# 3. Create Web Service for API (Free tier)
+# 4. Create Background Worker for workers (Free tier)
+# 5. Create Static Site for frontend (Free tier - $0!)
+# Total: $0/month for MVP, $28/month for production
+```
+
+**Why Render?**
+- ✅ Free tier (vs Railway's $5 minimum)
+- ✅ Most affordable production ($28 vs Railway $28-50)
+- ✅ Native background worker support
+- ✅ Automatic HTTPS and custom domains
+
+See [Render Deployment Guide](docs/render-deployment.md) for step-by-step instructions.
+
+**Cost Comparison:**
+- MVP/Testing: **$0/month** (free tier)
+- Small Production: **$28/month**
+- Medium Production: **$95/month**
+- Alternative: Railway ($28-50/month) - see [Railway Guide](docs/railway-deployment.md)
+
+### Option 2: Docker Compose (Local/Development)
 
 ```bash
 # Create .env file with required variables
@@ -222,7 +249,7 @@ docker-compose up -d --scale worker=3
 docker-compose down
 ```
 
-### Option 2: Docker Build (Production)
+### Option 3: Docker Build (Production)
 
 ```bash
 # Build images
@@ -235,7 +262,7 @@ docker tag universal-crawler-api ghcr.io/your-org/api-server:latest
 docker push ghcr.io/your-org/api-server:latest
 ```
 
-### Option 3: AWS Deployment with Terraform
+### Option 4: AWS Deployment with Terraform
 
 ```bash
 # Navigate to terraform directory
@@ -260,7 +287,7 @@ terraform output
 
 See [Terraform README](infra/terraform/README.md) for detailed deployment guide.
 
-### Option 4: Manual Deployment
+### Option 5: Manual Deployment
 
 ```bash
 # Build production bundles
