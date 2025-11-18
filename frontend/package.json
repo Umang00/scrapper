@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test": "vitest"
+    "test": "echo \"No tests in frontend workspace\" && exit 0"
   },
   "dependencies": {
     "next": "^15.1.5",

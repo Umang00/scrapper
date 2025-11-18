@@ -89,9 +89,7 @@ jobs:
         if: matrix.workspace == 'frontend'
         with:
           name: frontend-build
-          path: |
-            frontend/.next
-            frontend/public
+          path: frontend/.next
           retention-days: 7
 
   # Run tests
