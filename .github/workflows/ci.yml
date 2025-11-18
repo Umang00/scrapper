@@ -78,12 +78,23 @@ jobs:
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
+        if: matrix.workspace != 'frontend'
         with:
           name: ${{ matrix.workspace }}-build
           path: ${{ matrix.workspace }}/dist
           retention-days: 7
 
-  # Run tests (placeholder for future implementation)
+      - name: Upload frontend build artifacts
+        uses: actions/upload-artifact@v4
+        if: matrix.workspace == 'frontend'
+        with:
+          name: frontend-build
+          path: |
+            frontend/.next
+            frontend/public
+          retention-days: 7
+
+  # Run tests
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -105,8 +116,9 @@ jobs:
           PUPPETEER_SKIP_DOWNLOAD: true
 
       - name: Run tests
-        run: echo "Tests not implemented yet - placeholder for Phase 5"
-        # Future: npm test --workspaces
+        run: npm test -- --run --reporter=verbose
+        env:
+          NODE_ENV: test
 
   # Build and push Docker images
   docker:
